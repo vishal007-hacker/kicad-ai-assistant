@@ -1,0 +1,247 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "kcaa"
+version = "0.2.2"
+description = "Model Context Protocol (MCP) server for KiCad electronic design automation (EDA) files"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "KiCad MCP Contributors" }
+]
+maintainers = [
+    { name = "KiCad MCP Contributors" }
+]
+keywords = [
+    "kicad",
+    "eda",
+    "electronics",
+    "schematic",
+    "pcb",
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "assistant"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Manufacturing",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed"
+]
+requires-python = ">=3.10"
+dependencies = [
+    "mcp[cli]>=1.0.0",
+    "fastmcp>=2.0.0",
+    "pandas>=2.0.0",
+    "pyyaml>=6.0.0",
+    "defusedxml>=0.7.0",  # Secure XML parsing
+    "kicad-skip>=0.2.5",  # KiCad S-expression file parser (imports as `skip`)
+    "sqlalchemy>=2.0.0",  # Symbol database ORM
+    "kicad-python>=0.7.1",  # KiCad IPC API bindings (requires KiCad 9+ GUI running)
+    "shapely>=2.0.0",      # Geometric operations for PNS router (polygon ops, buffering, visibility)
+    "rtree>=1.3.0",        # Spatial index for fast obstacle queries in PNS router
+    "certifi>=2026.2.25",
+] 
+
+[project.urls]
+"Homepage" = "https://github.com/paul356/KiCad-AI-Assistant"
+"Bug Tracker" = "https://github.com/paul356/KiCad-AI-Assistant/issues"
+"Documentation" = "https://github.com/paul356/KiCad-AI-Assistant#readme"
+
+[project.scripts]
+kcaa = "kcaa.server:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-mock>=3.10.0",
+    "pytest-cov>=4.0.0",
+    "pytest-xdist>=3.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.8.0",
+    "pre-commit>=3.0.0",
+    "bandit>=1.7.0",  # Security linting for pre-commit hooks
+]
+docs = [
+    "sphinx>=7.0.0",
+    "sphinx-rtd-theme>=1.3.0",
+    "myst-parser>=2.0.0",
+]
+security = [
+    "bandit>=1.7.0",
+    "safety>=3.0.0",
+]
+performance = [
+    "memory-profiler>=0.61.0",
+    "py-spy>=0.3.0",
+]
+visualization = [
+    "cairosvg>=2.7.0",     # SVG to PNG conversion
+    "Pillow>=10.0.0",      # Image processing
+    "playwright>=1.40.0",  # Browser automation (optional)
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+    "SIM", # flake8-simplify
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by ruff format
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex (handled by other tools)
+    "B905",  # zip() without an explicit strict= parameter
+    "B007",  # loop control variable not used
+    "E722",  # bare except
+    "E741",  # ambiguous variable name
+    "E402",  # module level import not at top of file
+    "B018",  # useless expression
+    "F403",  # star imports
+    "F405",  # may be undefined from star imports
+    "SIM102",  # nested if statements
+    "SIM105",  # use contextlib.suppress
+    "SIM108",  # use ternary operator
+    "SIM114",  # combine if branches
+    "SIM115",  # use context handler for file operations
+    "SIM117",  # use single with statement
+    "SIM118",  # use in for dict key lookup
+    "SIM103",  # return bool directly
+]
+unfixable = [
+    "B",  # Avoid trying to fix flake8-bugbear violations
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "S101",  # Use of assert detected
+    "D103",  # Missing docstring in public function
+    "SLF001", # Private member accessed
+]
+"kcaa/config.py" = [
+    "E501",  # Long lines in config are ok
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["kcaa"]
+force-sort-within-sections = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+disallow_untyped_decorators = false
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pandas.*",
+    "mcp.*",
+]
+ignore_missing_imports = true
+
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=kcaa",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "--cov-report=xml",
+    "--cov-fail-under=50",
+    "-ra",
+    "--tb=short",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "slow: Tests that take more than a few seconds",
+    "requires_kicad: Tests that require KiCad CLI to be installed",
+    "performance: Performance benchmarking tests",
+]
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+    "ignore::RuntimeWarning:asyncio",
+]
+
+[tool.coverage.run]
+source = ["kcaa"]
+branch = true
+omit = [
+    "tests/*",
+    "kcaa/__init__.py",
+    "*/migrations/*",
+    "*/venv/*",
+    "*/.venv/*",
+]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["kcaa"]
+exclude = ["**/*.db", "**/*.db-shm", "**/*.db-wal"]
+
+[tool.hatch.build.targets.sdist]
+include = ["kcaa/", "LICENSE", "README.md", "README_CN.md", "pyproject.toml"]
+exclude = ["**/*.db", "**/*.db-shm", "**/*.db-wal"]

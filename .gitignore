@@ -1,0 +1,80 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+
+# Environment files
+.env
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+*.whl
+
+# PyPI
+.pypirc
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.pytest_cache/
+MagicMock/
+
+# Logs
+logs/
+*.log
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# MCP specific
+~/.kcaa/drc_history/
+
+# Symbol database files (auto-generated, do not commit)
+kcaa/utils/symbol_db/*.db
+kcaa/utils/symbol_db/*.db-shm
+kcaa/utils/symbol_db/*.db-wal
+
+# Footprint database files (auto-generated, do not commit)
+kcaa/utils/footprint_db/*.db
+kcaa/utils/footprint_db/*.db-shm
+kcaa/utils/footprint_db/*.db-wal
+
+# UV and modern Python tooling
+.uv-cache/
+.ruff_cache/
+
+
+# KiCad backup files
+*-backups/
+fp-info-cache
+*.bak
+*.backup
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.kicad_pro-bak
+*.kicad_prl
+*.kicad_prl-bak
+*.kicad_sch.lck
+*.kicad_pcb.lck
+*.kicad_pro.lck
